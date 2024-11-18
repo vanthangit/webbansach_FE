@@ -1,6 +1,42 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { lay3SachMoiNhat } from "../../../api/SachAPI";
+import SachModel from "../../../models/SachModel";
+import CarouselItem from "./CarouselItem";
 
-function Carousel() {
+const Carousel: React.FC = () => {
+
+    const [danhSachQuyenSach, setDanhSachQuyenSach] = useState<SachModel[]>([]);
+    const [dangTaiDuLieu, setDangTaiDuLieu] = useState(true);
+    const [baoLoi, setBaoLoi] = useState(null);
+
+    useEffect(()=>{
+        lay3SachMoiNhat().then(
+            result =>{
+                setDanhSachQuyenSach(result.ketQua);
+                setDangTaiDuLieu(false);
+            }
+        ).catch(
+            error => {
+                setBaoLoi(error.message);
+            }
+        )
+    },[] //Chỉ gọi một lần
+    )
+
+    if(dangTaiDuLieu){
+        return (
+            <div>
+                <h1>Đang tải dữ liệu</h1>
+            </div>
+        )
+    }
+    if(baoLoi){
+        return (
+            <div>
+                <h1>Gặp lỗi: {baoLoi}</h1>
+            </div>
+        )
+    }
     return (
         <div>
             <div id="carouselExampleDark" className="carousel carousel-dark slide">
@@ -11,37 +47,13 @@ function Carousel() {
                 </div>
                 <div className="carousel-inner">
                     <div className="carousel-item active" data-bs-interval="10000">
-                        <div className="row align-items-center">
-                            <div className="col-5 text-center">
-                                <img src={'images/books/4.webp'} className="float-end" style={{ width: '300px' }} />
-                            </div>
-                            <div className="col-7">
-                                <h5>First slide label</h5>
-                                <p>Some representative placeholder content for the first slide.</p>
-                            </div>
-                        </div>
+                        <CarouselItem  key={0} sach={danhSachQuyenSach[0]}/>
                     </div>
                     <div className="carousel-item" data-bs-interval="10000">
-                        <div className="row align-items-center">
-                            <div className="col-5 text-center">
-                                <img src={'images/books/2.png'} className="float-end" style={{ width: '300px' }} />
-                            </div>
-                            <div className="col-7">
-                                <h5>Second slide label</h5>
-                                <p>Some representative placeholder content for the second slide.</p>
-                            </div>
-                        </div>
+                        <CarouselItem  key={0} sach={danhSachQuyenSach[1]}/>
                     </div>
                     <div className="carousel-item" data-bs-interval="10000">
-                        <div className="row align-items-center">
-                            <div className="col-5 text-center">
-                                <img src={'images/books/1.png'} className="float-end" style={{ width: '400px' }} />
-                            </div>
-                            <div className="col-7">
-                                <h5>Third slide label</h5>
-                                <p>Some representative placeholder content for the third slide.</p>
-                            </div>
-                        </div>
+                        <CarouselItem  key={0} sach={danhSachQuyenSach[2]}/>
                     </div>
                 </div>
                 <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
