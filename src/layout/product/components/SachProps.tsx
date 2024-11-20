@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import SachModel from "../../../models/SachModel";
 import HinhAnhModel from "../../../models/HinhAnhModel";
 import { lay1AnhCuaMotSach, layToanBoAnhCuaMotSach } from "../../../api/HinhAnhAPI";
+import { Link } from "react-router-dom";
+import renderRating from "../../utils/SaoXepHang";
+import dinhDangSo from "../../utils/DinhDangSo";
 
 interface SachPropsInterface {
     sach: SachModel;
@@ -51,37 +54,41 @@ const SachProps: React.FC<SachPropsInterface> = (props) => {
     return (
         <div className="col-md-3 mt-2">
             <div className="card h-100">
-                <img
-                    src={duLieuAnh}
-                    className="card-img-top"
-                    alt={props.sach.tenSach}
-                    style={{ 
-                        width: '100%', 
-                        height: '300px', 
-                        objectFit: 'cover', 
-                        borderTopLeftRadius: '8px', 
-                        borderTopRightRadius: '8px'
-                    }}
-                />
+                <Link to={`/sach/${props.sach.maSach}`}>
+                    <img
+                        src={duLieuAnh}
+                        className="card-img-top"
+                        alt={props.sach.tenSach}
+                        style={{ 
+                            width: '100%', 
+                            height: '300px', 
+                            objectFit: 'cover', 
+                            borderTopLeftRadius: '8px', 
+                            borderTopRightRadius: '8px'
+                        }}
+                    />
+                </Link>
                 <div className="card-body d-flex flex-column">
+                <Link to={`/sach/${props.sach.maSach}`} style={{textDecoration: `none`}}>
                     <h5 className="card-title">{props.sach.tenSach}</h5>
-                    <p className="card-text">{props.sach.moTa}</p>
-                    <div className="price mt-auto">
-                        <span className="original-price text-muted mr-2">
-                            <del>{props.sach.giaNiemYet}</del>
+                </Link>
+                    <div className="price mt-auto row">
+                        <span className="original-price mr-2 col-6">
+                            <del>{dinhDangSo(props.sach.giaNiemYet?props.sach.giaNiemYet:0)}đ</del>
                         </span>
-                        <span className="discounted-price text-danger">
-                            <strong>{props.sach.giaBan}</strong>
+                        <span className="discounted-price col-6">
+                            <strong>{dinhDangSo(props.sach.giaBan?props.sach.giaBan:0)}đ</strong>
                         </span>
                     </div>
                     <div className="row mt-3" role="group">
                         <div className="col-6">
-                            <button className="btn btn-secondary btn-block" title="Add to Wishlist">
+                            {renderRating(props.sach.trungBinhXepHang?props.sach.trungBinhXepHang:0)}
+                        </div>
+                        <div className="col-6 text-end">
+                            <button className="btn btn-secondary btn-block me-2" title="Add to Wishlist">
                                 <i className="fas fa-heart"></i>
                             </button>
-                        </div>
-                        <div className="col-6">
-                            <button className="btn btn-danger btn-block" title="Add to Cart">
+                            <button className="btn btn-danger btn-block " title="Add to Cart">
                                 <i className="fas fa-shopping-cart"></i>
                             </button>
                         </div>

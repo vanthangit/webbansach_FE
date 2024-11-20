@@ -7,9 +7,10 @@ import { PhanTrang } from "../utils/PhanTrang";
 //Nhận vào từ khóa và xử lý tìm kiếm bằng cách gọi lại hàm bên API
 interface DanhSachSanPhamProps{
     tuKhoaTimKiem: string
+    maTheLoai: number
 }
 
-function DanhSachSanPham({tuKhoaTimKiem}: DanhSachSanPhamProps){
+function DanhSachSanPham({tuKhoaTimKiem, maTheLoai}: DanhSachSanPhamProps){
     
     const [danhSachQuyenSach, setDanhSachQuyenSach] = useState<SachModel[]>([]);
     const [dangTaiDuLieu, setDangTaiDuLieu] = useState(true);
@@ -18,7 +19,7 @@ function DanhSachSanPham({tuKhoaTimKiem}: DanhSachSanPhamProps){
     const [tongSoTrang, setTongSoTrang] = useState(0);
 
     useEffect(()=>{
-        if(tuKhoaTimKiem===''){
+        if(tuKhoaTimKiem==='' && maTheLoai === 0){
         layToanBoSach(trangHienTai-1).then(
             result =>{
                 setDanhSachQuyenSach(result.ketQua);
@@ -31,7 +32,7 @@ function DanhSachSanPham({tuKhoaTimKiem}: DanhSachSanPhamProps){
             }
         );
         }else{
-            timKiemSach(tuKhoaTimKiem).then(
+            timKiemSach(tuKhoaTimKiem, maTheLoai).then(
                 result =>{
                     setDanhSachQuyenSach(result.ketQua);
                     setTongSoTrang(result.tongSoTrang)
@@ -43,7 +44,7 @@ function DanhSachSanPham({tuKhoaTimKiem}: DanhSachSanPhamProps){
                 }
             );
         }
-    },[trangHienTai, tuKhoaTimKiem] //Chỉ gọi một lần
+    },[trangHienTai, tuKhoaTimKiem, maTheLoai] //Chỉ gọi một lần
     )
 
     const phanTrang=(trang: number) =>{
